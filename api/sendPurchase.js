@@ -5,7 +5,12 @@ module.exports = async (req, res) => {
   const PIXEL_ID = "820884173290312";
   const ACCESS_TOKEN = "EAARuZCF4UqWgBO9qjbHC8JR4DhgaldsyZCTJTncKbf3JfHIgRO49zEUOlxfRQD1nO7b0YG5j3ZCfwdY6rFaHGNDt18FLuu7WbGE2H5ZAsD172ApNGos4fQqNZCCEHoEQ8iciVT3ZAj7xhcq1Tx9Patlo4aTQ4Fg0g6Jff0QhtGkZB0hJLvZB5s0AAKr7qIZAZCdwZDZD";
 
-  const email = "ricardofgs@icloud.com";
+  const { email, value } = req.query;
+
+  if (!email || !value) {
+    return res.status(400).json({ success: false, error: "Parâmetros 'email' e 'value' são obrigatórios na query." });
+  }
+
   const hashedEmail = crypto.createHash("sha256").update(email.trim().toLowerCase()).digest("hex");
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -21,7 +26,7 @@ module.exports = async (req, res) => {
         },
         custom_data: {
           currency: "BRL",
-          value: 37.00
+          value: parseFloat(value)
         }
       }
     ]
